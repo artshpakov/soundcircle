@@ -1,0 +1,3 @@
+== SoundCircle
+
+A Node.js / MongoDB / Backbone.js application
