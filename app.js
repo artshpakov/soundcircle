@@ -1,6 +1,7 @@
 // Module dependencies.
 
 var express = require('express'),
+    mongo = require('mongoskin'),
     coffee = require('coffee-script');
 
 var app = module.exports = express.createServer();
@@ -11,6 +12,7 @@ app.configure(function(){
   app.set('views', __dirname + '/app/templates');
   app.set('view engine', 'jade');
   app.set('port', 3000);
+  app.set('connection_string', "localhost:"+mongo.Connection.DEFAULT_PORT+"/soundcircle?auto_reconnect");
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -23,10 +25,13 @@ app.configure('development', function(){
 
 app.configure('test', function(){
   app.set('port', 3001);
+  app.set('database', 'soundcircle_test');
 });
 
 app.configure('production', function(){
+  if (!process.env.DB_STRING) throw "Connection string not specified";
   app.use(express.errorHandler());
+  app.set('connection_string', process.env.DB_STRING);
 });
 
 // Routes
