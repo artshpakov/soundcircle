@@ -1,0 +1,10 @@
+if is_authenticated
+  p
+    | Signed in as 
+    strong= current_user.login
+    |  | 
+    a(href='/logout') Sign out
+else
+  form(action='login', method='post')
+    input(type='text', name='login')
+    button(type='submit') Sign in

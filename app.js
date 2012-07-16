@@ -2,6 +2,7 @@
 
 var express = require('express'),
     mongo = require('mongoskin'),
+    mongoStore = require('connect-mongodb'),
     coffee = require('coffee-script');
 
 var app = module.exports = express.createServer();
@@ -15,6 +16,11 @@ app.configure(function(){
   app.set('connection_string', "localhost:"+mongo.Connection.DEFAULT_PORT+"/soundcircle?auto_reconnect");
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.session({
+    secret: 'hfjaisdhf746ijfid45djdiweur67w4_',
+    store: new mongoStore({url: "mongodb://"+app.settings.connection_string, maxAge: 300000})
+  }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
